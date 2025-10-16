@@ -1,0 +1,21 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.env
+.venv
+
+# Logs and temp
+*.log
+*.tmp
+
+# SSH keys (do not commit)
+jubin_github
+jubin_github.pub
+jubin_personal
+jubin_personal.pub
+
+
