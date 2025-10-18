@@ -1,5 +1,5 @@
 # RL-De-Novo-TYR-Inhibitor-Design
-the framework based on reinforcement learning for forward synthesis
+The framework based on reinforcement learning for forward synthesis
 
 
 ## AI-driven de novo molecular generation targeting TYR

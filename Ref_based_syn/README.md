@@ -1,4 +1,5 @@
-#RL-De-Novo-TYR-Inhibitor-Generation-Based-on-Lead-Compound
+# RL-De-Novo-TYR-Inhibitor-Generation-Based-on-Lead-Compound
+Molecular generation based on reference molecules and forward synthesis techniques
 
 
 ## RL model-driven forward structural optimization of the AI-generated TYR inhibitor AI10
