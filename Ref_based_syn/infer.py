@@ -11,6 +11,7 @@ from typing import Optional
 import numpy as np
 
 from rlsyn_base.paths import data_path, ensure_dir, read_first_column_csv, read_smiles_lines
+from rlsyn_base.paths import test_path
 
 _IMPORT_ERROR: Optional[Exception]
 try:
@@ -32,7 +33,24 @@ except Exception as e:  # pragma: no cover (env-dependent)
     _IMPORT_ERROR = e
 
 
-DEFAULT_REF_SMILES = "CC1=CC=C(NC(=O)CCCN2CCN(C/C=C/C3=CC=CC=C3)CC2)C(C)=C1"
+FALLBACK_REF_SMILES = "CC1=CC=C(NC(=O)CCCN2CCN(C/C=C/C3=CC=CC=C3)CC2)C(C)=C1"
+
+
+def default_ref_smiles() -> str:
+    """
+    Prefer the canonical test reference SMILES (AI10) if present:
+      repo-root/test/2y9x/compounds.smi
+    Otherwise fall back to the historical hard-coded SMILES.
+    """
+    p = Path(test_path("2y9x", "compounds.smi"))
+    if p.exists():
+        try:
+            s = p.read_text(encoding="utf-8").strip().splitlines()[0].strip()
+            if s:
+                return s
+        except Exception:
+            pass
+    return FALLBACK_REF_SMILES
 
 
 @dataclass
@@ -278,7 +296,7 @@ def run_validation(args: argparse.Namespace) -> int:
             "Please install the Ref_based_syn conda environment (see Ref_based_syn/README.md). "
             f"Original import error: {_IMPORT_ERROR}"
         )
-    ref = args.ref_smiles or DEFAULT_REF_SMILES
+    ref = args.ref_smiles or default_ref_smiles()
 
     # keep root-level data/ unchanged as requested
     bb_csv = args.building_blocks_csv or data_path("building_blocks_inland.csv")
@@ -323,7 +341,7 @@ def run_validation(args: argparse.Namespace) -> int:
 def build_argparser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(description="Ref_based_syn inference + validation")
     p.add_argument("--validate", action="store_true", help="Run built-in validation case")
-    p.add_argument("--ref_smiles", type=str, default=DEFAULT_REF_SMILES)
+    p.add_argument("--ref_smiles", type=str, default=None, help="Reference/lead compound SMILES; default reads test/2y9x/compounds.smi")
     p.add_argument("--building_blocks_csv", type=str, default=None)
     p.add_argument("--template_file", type=str, default=None)
     p.add_argument("--out_dir", type=str, default=None)

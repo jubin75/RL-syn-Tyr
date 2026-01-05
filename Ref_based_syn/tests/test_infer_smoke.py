@@ -4,7 +4,7 @@ def test_infer_validation_smoke():
     generate at least 1 candidate when RDKit is available.
     """
     try:
-        from Ref_based_syn.infer import generate_candidates, DEFAULT_REF_SMILES
+        from Ref_based_syn.infer import generate_candidates, default_ref_smiles
         from rlsyn_base.paths import data_path, read_first_column_csv
     except Exception as e:
         # If imports fail in an environment without deps, don't hard-fail CI-less repos.
@@ -17,7 +17,7 @@ def test_infer_validation_smoke():
         return
 
     candidates, meta = generate_candidates(
-        DEFAULT_REF_SMILES,
+        default_ref_smiles(),
         building_blocks=building_blocks,
         template_file=template_file,
         max_templates=10,

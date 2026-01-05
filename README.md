@@ -32,7 +32,7 @@ conda activate ref_syn
 
 Notes:
 - **RDKit** is required for fragment decomposition / reactions / similarity.
-- **Docking** (optional) requires `openbabel` + `qvina02` + a receptor `.pdbqt` file.
+- **Docking** (optional) requires `openbabel` + `qvina02` + a receptor file. This repo stores the receptor under `test/2y9x/2y9x_pocket.pdb` and converts it to `.pdbqt` automatically when `obabel` is available.
 
 ## Quick validation: inference pipeline (details)
 The validation script follows the reference-based workflow:
@@ -59,3 +59,7 @@ python -m Ref_based_syn.main --max_episodes 2
 ## Project wiring (repo-root base module)
 `Ref_based_syn` uses the repo-root shared module `rlsyn_base` for **stable paths** (e.g. the shared `data/` directory).
 This keeps `data/` at the repo root unchanged while allowing `Ref_based_syn` to be imported and executed reliably.
+
+## Test assets (what reviewers should use)
+- **AI10 reference SMILES**: `test/2y9x/compounds.smi` (the inference demo defaults to this file)
+- **2y9x receptor pocket**: `test/2y9x/2y9x_pocket.pdb`

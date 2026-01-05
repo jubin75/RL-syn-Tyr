@@ -17,7 +17,7 @@ conda activate ref_syn
 
 Notes:
 - **RDKit** is required for fragment decomposition / reactions / similarity.
-- **Docking** (optional) requires `openbabel` + `qvina02` + a receptor `.pdbqt` file.
+- **Docking** (optional) requires `openbabel` + `qvina02` + a receptor file. This repo stores the receptor under `test/2y9x/2y9x_pocket.pdb` and converts it to `.pdbqt` automatically when `obabel` is available.
 
 ## Quick validation: inference pipeline (with a built-in SMILES case)
 We provide a lightweight inference + validation script that follows the paragraph above:
@@ -33,6 +33,12 @@ python -m Ref_based_syn.infer --validate
 Outputs a JSON report under `./results/` (e.g. `ref_infer_validation_*.json`) containing:
 - `meta`: reference SMILES, number of query fragments, number of templates, docking enabled or not
 - `top_k`: ranked candidates with similarity/drug-like/synthesizable scores (and docking score when available)
+
+### Test assets location (important)
+- **Reference/lead compound (AI10)**: `test/2y9x/compounds.smi`
+- **Receptor pocket**: `test/2y9x/2y9x_pocket.pdb`
+
+`Ref_based_syn.infer` will default to the first SMILES in `test/2y9x/compounds.smi` if `--ref_smiles` is not provided.
 
 ## Training entry (original code)
 If you want to train TD3 on the filtered reaction set (requires the prepared `data/*` files used by `SynthesisEnv`):

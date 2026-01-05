@@ -8,7 +8,9 @@ from multiprocessing import Manager, Process, Queue
 from openbabel import pybel
 from pathlib import Path
 
-from rlsyn_base.paths import data_path, ensure_dir
+import shutil
+
+from rlsyn_base.paths import ensure_dir, test_path
 
 
 class DockingVina(object):
@@ -28,6 +30,38 @@ class DockingVina(object):
 
         if not os.path.exists(self.temp_dir):
             os.makedirs(self.temp_dir)
+
+        # qvina/vina needs receptor in PDBQT; reviewers may only have PDB in test/.
+        self.receptor_file = self._ensure_receptor_pdbqt(self.receptor_file)
+
+    def _ensure_receptor_pdbqt(self, receptor_file: str) -> str:
+        p = Path(receptor_file)
+        if not p.exists():
+            return receptor_file
+        if p.suffix.lower() == ".pdbqt":
+            return receptor_file
+        if p.suffix.lower() != ".pdb":
+            return receptor_file
+
+        out = Path(self.temp_dir) / (p.stem + ".pdbqt")
+        if out.exists():
+            return str(out)
+
+        obabel = shutil.which("obabel")
+        if obabel is None:
+            # Can't convert automatically; docking will likely fail, but inference can still run without docking.
+            return receptor_file
+
+        # Convert receptor pdb -> pdbqt
+        try:
+            subprocess.check_output(
+                [obabel, str(p), "-O", str(out)],
+                stderr=subprocess.STDOUT,
+                universal_newlines=True,
+            )
+            return str(out)
+        except Exception:
+            return receptor_file
 
     def docking(self, receptor_file, ligand_file, ligand_pdbqt_file, docking_pdbqt_file):
         """
@@ -183,7 +217,8 @@ class DockingVina(object):
 
 def get_docking_config_for_vina():
     docking_config = dict()
-    docking_config['receptor_file'] = data_path('2y9x.pdbqt')
+    # Canonical test assets live under repo-root test/ (not data/)
+    docking_config['receptor_file'] = test_path('2y9x', '2y9x_pocket.pdb')
     docking_config['vina_program'] = str(Path(__file__).resolve().parent / 'qvina02')
     box_center = (-31.96273, -2.509867, -93.069374)
     box_size = (23.473999, 16.628, 22.723999)

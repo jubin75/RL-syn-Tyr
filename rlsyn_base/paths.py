@@ -17,6 +17,18 @@ def data_dir() -> Path:
     """
     return repo_root() / "data"
 
+def test_dir() -> Path:
+    """
+    Root-level test directory: <repo>/test
+    """
+    return repo_root() / "test"
+
+def test_path(*parts: str) -> str:
+    """
+    Convenience helper returning a string path under <repo>/test.
+    """
+    return str(test_dir().joinpath(*parts))
+
 
 def data_path(*parts: str) -> str:
     """
