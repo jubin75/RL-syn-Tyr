@@ -19,3 +19,43 @@ python -m Ref_based_syn.infer --validate
 ```
 
 This runs a full validation pipeline with a built-in reference SMILES case and produces a ranked report under `./results/`.
+
+## Installation (recommended)
+This repo is organized as a **repo-root project** with `Ref_based_syn` as a Python package.
+
+- **Create conda env** (example; adjust for your platform):
+
+```bash
+conda env create -f Ref_based_syn/environment.yaml
+conda activate ref_syn
+```
+
+Notes:
+- **RDKit** is required for fragment decomposition / reactions / similarity.
+- **Docking** (optional) requires `openbabel` + `qvina02` + a receptor `.pdbqt` file.
+
+## Quick validation: inference pipeline (details)
+The validation script follows the reference-based workflow:
+decompose reference → retrieve similar fragments/building blocks → generate by reaction templates →
+evaluate similarity + (optional) docking → apply drug-likeness + synthetic feasibility filters → rank Top-K.
+
+Run:
+
+```bash
+python -m Ref_based_syn.infer --validate
+```
+
+Outputs a JSON report under `./results/` (e.g. `ref_infer_validation_*.json`) containing:
+- `meta`: reference SMILES, number of query fragments, number of templates, docking enabled or not
+- `top_k`: ranked candidates with similarity/drug-like/synthesizable scores (and docking score when available)
+
+## Training entry (original code)
+If you want to train TD3 on the filtered reaction set (requires the prepared `data/*` files used by `SynthesisEnv`):
+
+```bash
+python -m Ref_based_syn.main --max_episodes 2
+```
+
+## Project wiring (repo-root base module)
+`Ref_based_syn` uses the repo-root shared module `rlsyn_base` for **stable paths** (e.g. the shared `data/` directory).
+This keeps `data/` at the repo root unchanged while allowing `Ref_based_syn` to be imported and executed reliably.
