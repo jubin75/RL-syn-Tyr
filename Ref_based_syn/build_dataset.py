@@ -1,8 +1,8 @@
 import numpy as np
 from rdkit import Chem
-from decomposer import BreakMol
+from .decomposer import BreakMol
 from tqdm import tqdm
-from utils import *
+from .utils import *
 
 
 def search_fragements(smiles, building_blocks, bb_emb, nBit=256):

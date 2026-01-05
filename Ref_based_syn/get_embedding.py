@@ -1,7 +1,7 @@
 import argparse
 import numpy as np
 import multiprocessing as mp
-from utils import get_morgen_fingerprint
+from .utils import get_morgen_fingerprint
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--input', type=str, default='data/zinc_frags_in_stock.txt')

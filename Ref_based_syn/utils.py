@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from rdkit import Chem 
 from rdkit.Chem import AllChem, DataStructs
-from data_utils import Reaction, ReactionSet
+from .data_utils import Reaction, ReactionSet
 
 
 def strip_dummy_atoms(mol):

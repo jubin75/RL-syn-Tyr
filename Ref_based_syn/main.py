@@ -3,10 +3,10 @@ import time
 import random
 import torch 
 import argparse
-from env import SynthesisEnv
-from td3 import TD3
-from dock import *
-from utils import *
+from .env import SynthesisEnv
+from .td3 import TD3
+from .dock import DockingVina, get_docking_config_for_vina
+from .utils import create_dir
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--max_episodes', type=int, default=2)

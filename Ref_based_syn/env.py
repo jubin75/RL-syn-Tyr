@@ -6,8 +6,8 @@ import copy
 from rdkit import Chem
 from rdkit.Chem import AllChem, DataStructs
 from rdkit.Chem.Descriptors import ExactMolWt
-from data_utils import ReactionSet
-from utils import get_reaction_mask, get_available_list, search_with_tanimoto, get_morgen_fingerprint
+from .data_utils import ReactionSet
+from .utils import get_reaction_mask, get_available_list, search_with_tanimoto, get_morgen_fingerprint
 
 
 def get_rewards(args, predictor, smiles):

@@ -6,6 +6,9 @@ import os, sys
 import subprocess
 from multiprocessing import Manager, Process, Queue
 from openbabel import pybel
+from pathlib import Path
+
+from rlsyn_base.paths import data_path, ensure_dir
 
 
 class DockingVina(object):
@@ -180,12 +183,12 @@ class DockingVina(object):
 
 def get_docking_config_for_vina():
     docking_config = dict()
-    docking_config['receptor_file'] = 'data/2y9x.pdbqt' 
-    docking_config['vina_program'] = './qvina02'
+    docking_config['receptor_file'] = data_path('2y9x.pdbqt')
+    docking_config['vina_program'] = str(Path(__file__).resolve().parent / 'qvina02')
     box_center = (-31.96273, -2.509867, -93.069374)
     box_size = (23.473999, 16.628, 22.723999)
     docking_config['box_parameter'] = (box_center, box_size)
-    docking_config['temp_dir'] = 'tmp'
+    docking_config['temp_dir'] = str(ensure_dir(Path.cwd() / 'tmp'))
     docking_config['exhaustiveness'] = 4
     docking_config['num_sub_proc'] = 10
     docking_config['num_cpu_dock'] = 3

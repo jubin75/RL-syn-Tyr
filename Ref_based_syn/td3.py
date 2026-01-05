@@ -2,8 +2,8 @@ import os
 import numpy as np
 import torch 
 import torch.nn.functional as F 
-from model import Critic, GetTemplate, GetAction
-from utils import get_reaction_mask, plot_learning_curve, postprocessing
+from .model import Critic, GetTemplate, GetAction
+from .utils import get_reaction_mask, plot_learning_curve, postprocessing
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
