@@ -40,6 +40,64 @@ Outputs a JSON report under `./results/` (e.g. `ref_infer_validation_*.json`) co
 
 `Ref_based_syn.infer` will default to the first SMILES in `test/2y9x/compounds.smi` if `--ref_smiles` is not provided.
 
+## Reviewer minimal reproducibility (hard checklist)
+This section is intended for **peer-reviewers** who want a minimal end-to-end run.
+
+### Supported platforms for the minimal run
+- **Linux/macOS**: the minimal inference validation does **not** require GPU.
+- **Docking note**: the shipped `Ref_based_syn/qvina02` binary may be platform-specific. If docking cannot run on your OS, the validation still runs (docking will be skipped unless explicitly enabled and available).
+
+### Step 0 — clone and enter repo
+
+```bash
+git clone <REPO_URL>
+cd RL-syn-Tyr
+```
+
+### Step 1 — create the environment
+
+```bash
+conda env create -f Ref_based_syn/environment.yaml
+conda activate ref_syn
+```
+
+### Step 2 — verify test assets exist (AI10 + receptor pocket)
+
+```bash
+ls -lh test/2y9x/compounds.smi test/2y9x/2y9x_pocket.pdb
+```
+
+Expected:
+- `test/2y9x/compounds.smi` contains at least **one** SMILES (first line = AI10)
+- `test/2y9x/2y9x_pocket.pdb` exists
+
+### Step 3 — run the minimal inference+validation (no docking)
+
+```bash
+python -m Ref_based_syn.infer --validate
+```
+
+Expected:
+- exit code **0**
+- prints a line like: `output=.../ref_infer_validation_YYYYmmddHHMMSS.json`
+- the JSON contains `top_k` and `all_count` fields
+
+### Optional — enable docking (if your environment supports it)
+If you have `obabel` and a working `qvina02` for your platform:
+
+```bash
+python -m Ref_based_syn.infer --validate --do_docking
+```
+
+Expected:
+- receptor `test/2y9x/2y9x_pocket.pdb` is converted to a temporary `.pdbqt` under `./tmp/` when needed
+- `docking_score` appears in the output JSON for candidates
+
+### About training reproducibility
+`python -m Ref_based_syn.main` corresponds to the original TD3 training entry. Full training runs typically require
+additional prepared data artifacts referenced by `SynthesisEnv` (e.g. reaction-filter outputs and embeddings).
+For peer-review we recommend using the minimal validation pipeline above as the “always runnable” path.
+
 ## Training entry (original code)
 If you want to train TD3 on the filtered reaction set (requires the prepared `data/*` files used by `SynthesisEnv`):
 

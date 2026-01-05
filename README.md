@@ -63,3 +63,32 @@ This keeps `data/` at the repo root unchanged while allowing `Ref_based_syn` to 
 ## Test assets (what reviewers should use)
 - **AI10 reference SMILES**: `test/2y9x/compounds.smi` (the inference demo defaults to this file)
 - **2y9x receptor pocket**: `test/2y9x/2y9x_pocket.pdb`
+
+## Reviewer minimal reproducibility (hard checklist)
+This is the **minimal runnable path** for reviewers after cloning.
+
+### 1) Environment
+
+```bash
+conda env create -f Ref_based_syn/environment.yaml
+conda activate ref_syn
+```
+
+### 2) Sanity-check test assets
+
+```bash
+ls -lh test/2y9x/compounds.smi test/2y9x/2y9x_pocket.pdb
+```
+
+### 3) Run the minimal end-to-end validation (no docking required)
+
+```bash
+python -m Ref_based_syn.infer --validate
+```
+
+Expected:
+- exit code **0**
+- a JSON report saved to `./results/ref_infer_validation_*.json`
+
+### Optional: enable docking (best-effort)
+Docking depends on `openbabel/obabel` and a working `qvina02` binary for your platform. If not available, the minimal validation above remains runnable and is the recommended review path.
