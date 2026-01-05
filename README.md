@@ -64,8 +64,8 @@ This keeps `data/` at the repo root unchanged while allowing `Ref_based_syn` to 
 - **AI10 reference SMILES**: `test/2y9x/compounds.smi` (the inference demo defaults to this file)
 - **2y9x receptor pocket**: `test/2y9x/2y9x_pocket.pdb`
 
-## Reviewer minimal reproducibility (hard checklist)
-This is the **minimal runnable path** for reviewers after cloning.
+## Minimal reproducibility (hard checklist)
+This is the **minimal runnable path** after cloning.
 
 ### 1) Environment
 

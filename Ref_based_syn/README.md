@@ -40,8 +40,8 @@ Outputs a JSON report under `./results/` (e.g. `ref_infer_validation_*.json`) co
 
 `Ref_based_syn.infer` will default to the first SMILES in `test/2y9x/compounds.smi` if `--ref_smiles` is not provided.
 
-## Reviewer minimal reproducibility (hard checklist)
-This section is intended for **peer-reviewers** who want a minimal end-to-end run.
+## Minimal reproducibility (hard checklist)
+This is a minimal end-to-end run checklist that anyone can follow.
 
 ### Supported platforms for the minimal run
 - **Linux/macOS**: the minimal inference validation does **not** require GPU.
